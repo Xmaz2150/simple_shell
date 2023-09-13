@@ -19,6 +19,7 @@ int main(void)
 			printf("$ ");
 			if (getline(&line, &line_size, stdin) == -1)
 				exit(97);
+
 			my_exec(split_line(line));
 		}
 		else
@@ -38,24 +39,6 @@ int main(void)
 }
 
 /**
- * split_line - splits line to tokkens
- * @s: Input, line
- *
- * Return: string array
- */
-
-char **split_line(char *s)
-{
-	char **s_arr = NULL;
-
-	(void)s;
-	/**
-	 * string to be tokkenized here
-	 */
-	return (s_arr);
-}
-
-/**
  * my_exec - main shell executer
  * @s_arr: Input, commands
  *
@@ -64,9 +47,14 @@ char **split_line(char *s)
 
 void my_exec(char **s_arr)
 {
-	(void)s_arr;
-
 	/**
 	 * all execution will happen here
 	 */
+
+	if (my_fork() == 0)
+	{
+		if (execve(s_arr[0], s_arr, NULL) == -1)
+			perror("hsh");
+	}
+	wait(NULL);
 }
