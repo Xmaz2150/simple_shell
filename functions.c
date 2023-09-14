@@ -4,6 +4,17 @@
 #define TOKKEN_DELIMS " \t\r\n\a"
 
 /**
+ * my_prompt - prints prompt to stdout
+ * @str: Input, prompt
+ *  Return: none
+ */
+
+void my_prompt(char *str)
+{
+	write(STDIN_FILENO, str, 2);
+}
+
+/**
  * print_str_arr - prints array of strings
  * @s_arr: Input, array
  * @arr_len: Input, no of arr elements

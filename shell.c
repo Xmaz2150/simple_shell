@@ -16,7 +16,7 @@ int main(void)
 	{
 		if (isatty(STDIN_FILENO) == 1)
 		{
-			printf("$ ");
+			my_prompt("$ ");
 			if (getline(&line, &line_size, stdin) == -1)
 				exit(97);
 
