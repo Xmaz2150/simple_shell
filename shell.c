@@ -19,7 +19,6 @@ int main(void)
 			my_prompt("$ ");
 			if (getline(&line, &line_size, stdin) == -1)
 				exit(97);
-
 			my_exec(split_line(line));
 		}
 		else
@@ -51,10 +50,17 @@ void my_exec(char **s_arr)
 	 * all execution will happen here
 	 */
 
-	if (my_fork() == 0)
+	if (access(s_arr[0], X_OK) == 0)
 	{
-		if (execve(s_arr[0], s_arr, NULL) == -1)
-			perror("hsh");
+		if (my_fork() == 0)
+		{
+			execve(s_arr[0], s_arr, NULL);
+		}
+		wait(NULL);
+
 	}
-	wait(NULL);
+	else
+	{
+		perror("hsh");
+	}
 }
