@@ -19,3 +19,19 @@ void free_arr(char ***addr)
 	}
 	free(*addr);
 }
+
+/**
+ * my_built_in - shell buitins
+ * @s_arr: Input, command and arguments
+ *
+ * Return: none
+ */
+
+void my_built_in(char **s_arr)
+{
+	if (s_arr == NULL)
+		exit(EXIT_FAILURE);
+
+	if (strcmp(s_arr[0], "exit") == 0)
+		exit(EXIT_SUCCESS);
+}

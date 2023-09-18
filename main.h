@@ -14,8 +14,9 @@ void my_exec(char **s_arr);
 int my_fork(void);
 void my_error(char *s);
 void my_prompt(char *str);
-void free_arr(char ***addr);
+void my_built_in(char **s_arr);
 
+void free_arr(char ***addr);
 void print_str_arr(char **s_arr, int arr_len);
 
 #endif /* MAIN_H */

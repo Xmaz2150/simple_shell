@@ -50,6 +50,8 @@ void my_exec(char **s_arr)
 	 * all execution will happen here
 	 */
 
+	my_built_in(s_arr);
+
 	if (access(s_arr[0], X_OK) == 0)
 	{
 		if (my_fork() == 0)
