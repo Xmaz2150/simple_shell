@@ -17,16 +17,15 @@ void my_prompt(char *str)
 /**
  * print_str_arr - prints array of strings
  * @s_arr: Input, array
- * @arr_len: Input, no of arr elements
  *
  * Return: none
  */
 
-void print_str_arr(char **s_arr, int arr_len)
+void print_str_arr(char **s_arr)
 {
 	int i;
 
-	for (i = 0; i < arr_len; i++)
+	for (i = 0; s_arr[i] != NULL; i++)
 	{
 		printf("%s\n", s_arr[i]);
 	}
@@ -77,6 +76,9 @@ char **split_line(char *s)
 	int arr_size, i;
 	char **s_arr;
 	char *str_tok;
+
+	if (line_check(s) == 1)
+		return (NULL);
 
 	arr_size = TOKKEN_BUF_SIZE;
 	i = 0;
