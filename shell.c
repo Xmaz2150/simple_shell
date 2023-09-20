@@ -26,7 +26,7 @@ int main(int argc, char **argv, char **envp)
 		signal(SIGINT, ctrl_c);
 		line_st = getline(&line, &line_size, stdin);
 		if (line_st == -1 || line_st == EOF)
-			return (0);
+			return (ctrl_d(line));
 		my_exec(split_line(line), envp);
 	}
 

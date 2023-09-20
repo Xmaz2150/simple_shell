@@ -9,6 +9,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+/**
+ * struct node - linked list structure for PATH variable
+ * @dir: Input, directory
+ * @next: Input, pointer to next node
+ */
+
 typedef struct node
 {
 	char *dir;
@@ -35,5 +41,6 @@ char *str_concat(char *s1, char *s2);
 char *get_cmd_path(my_list *path_list, char *command);
 
 void ctrl_c(int signum);
+int ctrl_d(char *str);
 
 #endif /* MAIN_H */
