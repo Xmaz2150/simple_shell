@@ -13,6 +13,7 @@ int main(int argc, char **argv, char **envp)
 {
 	char *line;
 	size_t line_size;
+	int line_st;
 
 	(void)argc;
 	(void)argv;
@@ -21,22 +22,12 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
-		{
 			my_prompt("$ ");
-			if (getline(&line, &line_size, stdin) == -1)
-				exit(97);
-			my_exec(split_line(line), envp);
-		}
-		else
-		{
 
-			if (getline(&line, &line_size, stdin) == -1)
-				exit(97);
-
-			my_exec(split_line(line), envp);
-
-			break;
-		}
+		line_st = getline(&line, &line_size, stdin);
+		if (line_st == -1 || line_st == EOF)
+			return (0);
+		my_exec(split_line(line), envp);
 	}
 
 	free(line);
