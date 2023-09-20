@@ -30,7 +30,7 @@ void my_error(char *s);
 void my_prompt(char *str);
 int my_built_in(char **s_arr, char **p_arr);
 
-void free_arr(char ***addr);
+void free_arr(char **addr);
 void print_str_arr(char **s_arr);
 int line_check(char *s);
 

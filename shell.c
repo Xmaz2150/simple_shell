@@ -27,6 +27,7 @@ int main(int argc, char **argv, char **envp)
 		line_st = getline(&line, &line_size, stdin);
 		if (line_st == -1 || line_st == EOF)
 			return (ctrl_d(line));
+
 		my_exec(split_line(line), envp);
 	}
 
@@ -59,7 +60,7 @@ void my_exec(char **s_arr, char **p_arr)
 			if (s_arr[0][0] == '/')
 			{
 				if (access(s_arr[0], X_OK) == 0)
-						execve(s_arr[0], s_arr, NULL);
+					execve(s_arr[0], s_arr, NULL);
 				else
 					perror("hsh/");
 			}

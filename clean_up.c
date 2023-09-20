@@ -7,18 +7,19 @@
  * Return: none
  */
 
-void free_arr(char ***addr)
+void free_arr(char **addr)
 {
 	size_t i;
 
 	i = 0;
-	while (*addr[i] != NULL)
+	while (addr[i] != NULL)
 	{
-		free(*addr[i]);
+		free(addr[i]);
 		i++;
 	}
-	free(*addr);
+	free(addr[i]);
 }
+
 
 /**
  * my_built_in - shell buitins
