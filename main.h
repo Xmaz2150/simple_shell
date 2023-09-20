@@ -34,4 +34,6 @@ my_list *path_list(char *path);
 char *str_concat(char *s1, char *s2);
 char *get_cmd_path(my_list *path_list, char *command);
 
+void ctrl_c(int signum);
+
 #endif /* MAIN_H */

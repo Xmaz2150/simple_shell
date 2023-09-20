@@ -23,7 +23,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		if (isatty(STDIN_FILENO) == 1)
 			my_prompt("$ ");
-
+		signal(SIGINT, ctrl_c);
 		line_st = getline(&line, &line_size, stdin);
 		if (line_st == -1 || line_st == EOF)
 			return (0);
