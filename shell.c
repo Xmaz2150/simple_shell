@@ -42,7 +42,7 @@ int main(int argc, char **argv, char **envp)
  * Reurn: none
  */
 
-void my_exec(char **s_arr, char **p_arr)
+int my_exec(char **s_arr, char **p_arr)
 {
 	char *path, *command;
 
@@ -54,24 +54,25 @@ void my_exec(char **s_arr, char **p_arr)
 
 	path = my_path(p_arr);
 	if (my_built_in(s_arr, p_arr) == 0)
+		return (0);
+
+	if (my_fork() == 0)
 	{
-		if (my_fork() == 0)
+		if (s_arr[0][0] == '/')
 		{
-			if (s_arr[0][0] == '/')
-			{
-				if (access(s_arr[0], X_OK) == 0)
-					execve(s_arr[0], s_arr, NULL);
-				else
-					perror("hsh/");
-			}
+			if (access(s_arr[0], X_OK) == 0)
+				execve(s_arr[0], s_arr, NULL);
 			else
-			{
-				command = get_cmd_path(path_list(path), s_arr[0]);
-				if (command == NULL)
-					perror("full command");
-				execve(command, s_arr, NULL);
-			}
+				perror("hsh/");
 		}
-		wait(NULL);
+		else
+		{
+			command = get_cmd_path(path_list(path), s_arr[0]);
+			if (command == NULL)
+				perror("full command");
+			execve(command, s_arr, NULL);
+		}
 	}
+	wait(NULL);
+	return (0);
 }

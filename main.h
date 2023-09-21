@@ -23,7 +23,7 @@ typedef struct node
 my_list;
 
 char **split_line(char *s);
-void my_exec(char **s_arr, char **p_arr);
+int my_exec(char **s_arr, char **p_arr);
 
 int my_fork(void);
 void my_error(char *s);
