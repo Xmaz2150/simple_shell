@@ -64,10 +64,9 @@ int main(int argc, char **argv, char **envp)
 
 int my_exec(char **s_arr, char **p_arr, char **argv, char *str, char *new_str, int l_count)
 {
-	char *path, *command;
+	char *command;
 	pid_t my_pid;
 	struct stat status;
-	my_list *paths;
 
 	if (s_arr == NULL || p_arr == NULL)
 		return (1);
@@ -96,19 +95,7 @@ int my_exec(char **s_arr, char **p_arr, char **argv, char *str, char *new_str, i
 		}
 		else
 		{
-			path = my_path(p_arr);
-			if (path == NULL)
-			{
-				write(STDERR_FILENO, "PATH not found", 16);
-				_exit(0);
-			}
-			paths = path_list(path);
-			if (paths == NULL)
-			{
-				write(STDERR_FILENO, "PATH List err", 13);
-				_exit(0);
-			}
-			command = get_cmd_path(path_list(path), s_arr[0]);
+			command = get_cmd_path(p_arr, s_arr[0]);
 			if (command == NULL)
 				my_error(s_arr, argv, str, new_str, l_count);
 			execve(command, s_arr, NULL);

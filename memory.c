@@ -106,3 +106,53 @@ void free_list(my_list *head)
 		head = next_node;
 	}
 }
+
+/**
+ * create_list - creates empty llist of
+ * @str: Input, str
+ *
+ * Return: new llist
+ */
+
+my_list *create_list(char *str)
+{
+	int i = 0;
+	int nodes = 1;
+	my_list *node, *head, *tmp, *end;
+
+	tmp = malloc(sizeof(my_list));
+	if (tmp == NULL)
+		return (NULL);
+	head = tmp;
+
+	end = malloc(sizeof(my_list));
+	if (end == NULL)
+	{
+		free(tmp);
+		return (NULL);
+	}
+	end->next = NULL;
+
+	while (str[i] != '\0')
+	{
+		if (str[i] == ':')
+			nodes++;
+		i++;
+	}
+
+	while ((nodes - 2) > 0)
+	{
+		node = malloc(sizeof(my_list));
+		if (node == NULL)
+		{
+			free(tmp);
+			free(end);
+			return (NULL);
+		}
+		tmp->next = node;
+		tmp = tmp->next;
+		nodes--;
+	}
+	tmp->next = end;
+	return (head);
+}

@@ -39,10 +39,11 @@ char *str_realloc(char *str);
 int _strlen(char *s);
 
 char *my_path(char **p_arr);
+my_list *create_list(char *str);
 my_list *path_list(char *path);
 
 char *str_concat(char *s1, char *s2);
-char *get_cmd_path(my_list *path_list, char *command);
+char *get_cmd_path(char **p_arr, char *command);
 
 void ctrl_c(int signum);
 int ctrl_d(char *str);

@@ -33,30 +33,42 @@ char *my_path(char **p_arr)
 
 my_list *path_list(char *path)
 {
-	my_list *head = NULL;
-	my_list  *tail = NULL;
+	my_list *ptr, *head;
 	char *dir;
+	int i = 0, j = 0, stcnt = 0, dir_len = 0;
 
-	dir = strtok(path, ":");
-	while (dir != NULL)
+	if (path ==  NULL)
+		return (NULL);
+	head = create_list(path);
+	ptr = head;
+	while (ptr != NULL)
 	{
-		my_list *new_node;
-
-		new_node = (my_list *)malloc(sizeof(my_list));
-		new_node->dir = strdup(dir);
-		new_node->next = NULL;
-
-		if (head == NULL)
+		if (path[i] == ':' || path[i] == '\0')
 		{
-			head = new_node;
-			tail = new_node;
+			if (path[i] != '\0')
+				i++;
+			dir = malloc(sizeof(char) * dir_len + 2);
+			if (dir == NULL)
+				return (NULL);
+			while (path[stcnt] != ':' && path[stcnt] != '\0')
+			{
+				dir[j] = path[stcnt];
+				stcnt++;
+				j++;
+			}
+			dir[j++] = '/';
+			dir[j] = '\0';
+			stcnt = i;
+			j = 0;
+			ptr->dir = dir;
+			ptr = ptr->next;
 		}
+
 		else
 		{
-			tail->next = new_node;
-			tail = new_node;
+			dir_len++;
+			i++;
 		}
-		dir = strtok(NULL, ":");
 	}
 	return (head);
 }
@@ -69,34 +81,41 @@ my_list *path_list(char *path)
  * Return: full command
  */
 
-char *get_cmd_path(my_list *path_list, char *command)
+char *get_cmd_path(char **p_arr, char *command)
 {
-	char *full_path;
-	int command_len, dir_len;
+	char *path, *full_path;
 	struct stat buffer;
-	my_list *tmp;
+	my_list *tmp, *paths;
 
-	if (path_list != NULL)
+	path = my_path(p_arr);
+	if (path == NULL)
 	{
-		command_len = _strlen(command);
+		write(STDERR_FILENO, "PATH not found", 16);
+		_exit(0);
+	}
+	paths = path_list(path);
+	if (paths == NULL)
+	{
+		write(STDERR_FILENO, "PATH List err", 13);
+		_exit(0);
+	}
 
-		tmp = path_list;
-		while (tmp != NULL)
+	tmp = paths;
+	while (tmp != NULL)
+	{
+		if (path[0] == ':')
+			full_path = str_concat("./", command);
+		else
+			full_path = str_concat(tmp->dir, command);
+		if (full_path == NULL)
+			return (NULL);
+		if (stat(full_path, &buffer) == 0 && access(full_path, X_OK) == 0)
 		{
-			dir_len = strlen(tmp->dir);
-			full_path = malloc(command_len + dir_len + 2);
-			strcpy(full_path, tmp->dir);
-			strcat(full_path, "/");
-			strcat(full_path, command);
-			strcat(full_path, "\0");
-			if (stat(full_path, &buffer) == 0)
-			{
-				return (full_path);
-			}
-
-			tmp = tmp->next;
+			free_list(paths);
+			return (full_path);
 		}
-		return (NULL);
+		tmp = tmp->next;
+		free(full_path);
 	}
 	return (NULL);
 }
