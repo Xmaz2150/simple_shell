@@ -78,7 +78,7 @@ char *get_cmd_path(my_list *path_list, char *command)
 
 	if (path_list != NULL)
 	{
-		command_len = strlen(command);
+		command_len = _strlen(command);
 
 		tmp = path_list;
 		while (tmp != NULL)
@@ -93,11 +93,8 @@ char *get_cmd_path(my_list *path_list, char *command)
 			{
 				return (full_path);
 			}
-			else
-			{
-				free(full_path);
-				tmp = tmp->next;
-			}
+
+			tmp = tmp->next;
 		}
 		return (NULL);
 	}

@@ -32,34 +32,29 @@ void print_str_arr(char **s_arr)
 }
 
 /**
- * my_fork - creates new process
- *
- * Return: process id
- */
-
-int my_fork(void)
-{
-	int pid;
-
-	pid = fork();
-
-	if (pid == -1)
-		perror("error forking");
-	return (pid);
-}
-
-/**
- * my_error - prints error
- * @s: Input, error message
+ * my_error - error handling
+ * @s_arr: Input, tokken arr
+ * @str: Input, input
+ * @new_str: Input, input realloced
+ * @l_count: Input, shell iterations
  *
  * Return: none
  */
-
-void my_error(char *s)
+void my_error(char **s_arr, char **argv, char *str, char *new_str, int l_count)
 {
-	(void)s;
+	char *num;
 
-	perror("Error");
+	num = int_to_str(l_count);
+	write(STDERR_FILENO, argv[0], _strlen(argv[0]));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, num, _strlen(num));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, s_arr[0], _strlen(s_arr[0]));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, "not found\n", 10);
+	free(num);
+	clean_up(s_arr, str, new_str);
+	exit(0);
 }
 
 
