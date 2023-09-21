@@ -23,11 +23,13 @@ void my_prompt(char *str)
 
 void print_str_arr(char **s_arr)
 {
-	int i;
+	int i, len;
 
 	for (i = 0; s_arr[i] != NULL; i++)
 	{
-		printf("%s\n", s_arr[i]);
+		len = _strlen(s_arr[i]);
+		write(STDOUT_FILENO, s_arr[i], len);
+		write(STDOUT_FILENO, "\n", 1);
 	}
 }
 
