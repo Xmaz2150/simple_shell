@@ -102,9 +102,7 @@ int my_exec(char **arr, char **env, char **av, char *s, char *n_s, int l_cnt)
 		}
 	}
 	else
-	{
 		wait(&signal);
-	}
 	return (0);
 }
 
