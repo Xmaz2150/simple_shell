@@ -67,6 +67,7 @@ int my_exec(char **s_arr, char **p_arr, char **argv, char *str, char *new_str, i
 	char *command;
 	pid_t my_pid;
 	struct stat status;
+	int pipe_fd[2];
 
 	if (s_arr == NULL || p_arr == NULL)
 		return (1);
@@ -77,6 +78,11 @@ int my_exec(char **s_arr, char **p_arr, char **argv, char *str, char *new_str, i
 	if (my_built_in(s_arr, p_arr, str, new_str, l_count) == 1)
 		return (0);
 
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
 	my_pid = fork();
 	if (my_pid == -1)
 	{
@@ -91,17 +97,43 @@ int my_exec(char **s_arr, char **p_arr, char **argv, char *str, char *new_str, i
 				my_error(s_arr, argv, str, new_str, l_count);
 			if (access(s_arr[0], X_OK) == -1)
 				my_error(s_arr, argv, str, new_str, l_count);
-			execve(s_arr[0], s_arr, NULL);
+			my_execve_child(pipe_fd, s_arr[0], s_arr);
 		}
 		else
 		{
 			command = get_cmd_path(p_arr, s_arr[0]);
 			if (command == NULL)
 				my_error(s_arr, argv, str, new_str, l_count);
-			execve(command, s_arr, NULL);
+			my_execve_child(pipe_fd, command, s_arr);
 		}
 	}
 	else
-		wait(NULL);
+		my_execve_parent(pipe_fd);
 	return (0);
+}
+
+void  my_execve_child(int pipe_fd[2], char *command, char **s_arr)
+{
+	close(pipe_fd[0]);
+
+	dup2(pipe_fd[1], STDOUT_FILENO);
+	execve(command, s_arr, NULL);
+
+	perror("execve");
+	exit(EXIT_FAILURE);	
+}
+
+void  my_execve_parent(int pipe_fd[2])
+{
+	char buffer[1024];
+	ssize_t bytes_read;
+
+	close(pipe_fd[1]);
+	while ((bytes_read = read(pipe_fd[0], buffer, sizeof(buffer))) > 0)
+	{
+		write(STDOUT_FILENO, buffer, bytes_read);
+	}
+
+	close(pipe_fd[0]);
+	wait(NULL);
 }

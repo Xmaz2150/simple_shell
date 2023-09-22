@@ -51,4 +51,7 @@ char *get_cmd_path(char **p_arr, char *command);
 void ctrl_c(int signum);
 int ctrl_d(char *str);
 
+void my_execve_child(int pipe_fd[2], char *command, char **s_arr);
+void my_execve_parent(int pipe_fd[2]);
+
 #endif /* MAIN_H */
