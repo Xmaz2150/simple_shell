@@ -64,42 +64,38 @@ void my_error(char **s_arr, char **argv, char *str, char *new_str, int l_count)
 
 char **split_line(char *s)
 {
-	int arr_size, i;
-	char **s_arr;
-	char *str_tok;
+	int i, t_count;
+	char **s_arr, *str_tok, *t_copy;
 
-	if (line_check(s) == 1)
-		return (NULL);
-
-	arr_size = TOKKEN_BUF_SIZE;
 	i = 0;
-	s_arr = malloc(arr_size * sizeof(char *));
-	if (s_arr == NULL)
+        t_count = 0;
+	if (s == NULL)
+		return (NULL);
+	while (*(s + i) != '\0')
 	{
-		perror("allocation error :input");
-		exit(98);
+		if (s[i] != ' ' && (s[i + 1] == ' ' || s[i + 1] == '\0'
+				       || s[i + 1] == '\t'))
+			t_count++;
+		i++;
 	}
 
+	i = 0;
+	s_arr = malloc(sizeof(char *) * (t_count + 1));
+	if (s_arr == NULL)
+		return (NULL);
 	str_tok = strtok(s, TOKKEN_DELIMS);
 	while (str_tok != NULL)
 	{
-		s_arr[i] = str_tok;
-		i++;
-
-		if (i >= arr_size)
+		t_copy = _strdup(str_tok);
+		if (t_copy == NULL)
 		{
-			arr_size += TOKKEN_BUF_SIZE;
-			s_arr = realloc(s_arr, arr_size * sizeof(char *));
-			if (s_arr == NULL)
-			{
-				perror("allocation error :tokken(s)");
-				exit(99);
-			}
+			free(s_arr);
+			return (NULL);
 		}
-
+		*(s_arr + i) = t_copy;
 		str_tok = strtok(NULL, TOKKEN_DELIMS);
+		i++;
 	}
-	s_arr[i] = NULL;
-
+	*(s_arr + i) = NULL;
 	return (s_arr);
 }

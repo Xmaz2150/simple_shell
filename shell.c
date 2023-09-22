@@ -48,6 +48,7 @@ int main(int argc, char **argv, char **envp)
 			return (0);
 		}
 		my_exec(s_arr, envp, argv, line, new_line, loop_count);
+		clean_up(s_arr, line, new_line);
 	}
 }
 /**

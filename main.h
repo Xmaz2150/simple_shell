@@ -39,6 +39,8 @@ char *str_realloc(char *str);
 int _strlen(char *s);
 int _atoi(char *s);
 int tens_multiplier(int pos, char *s);
+char *_strdup(char *str);
+char *str_concat_helper(char *new_str, char *s1, char *s2);
 
 int my_exit(char **s_arr, char *str, char *new_str, int l_count);
 char *my_path(char **p_arr);
