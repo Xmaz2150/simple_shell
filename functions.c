@@ -1,101 +1,182 @@
 #include "main.h"
 
-#define TOKKEN_BUF_SIZE 32
-#define TOKKEN_DELIMS " \t\r\n\a"
-
 /**
- * my_prompt - prints prompt to stdout
- * @str: Input, prompt
- *  Return: none
- */
-
-void my_prompt(char *str)
-{
-	write(STDIN_FILENO, str, 2);
-}
-
-/**
- * print_str_arr - prints array of strings
- * @s_arr: Input, array
+ * create_list - creates empty llist of
+ * @str: Input, str
  *
- * Return: none
+ * Return: new llist
  */
-
-void print_str_arr(char **s_arr)
+my_list *create_list(char *str)
 {
-	int i, len;
+	int i = 0;
+	int nodes = 1;
+	my_list *node, *head, *tmp, *end;
 
-	for (i = 0; s_arr[i] != NULL; i++)
-	{
-		len = _strlen(s_arr[i]);
-		write(STDOUT_FILENO, s_arr[i], len);
-		write(STDOUT_FILENO, "\n", 1);
-	}
-}
-
-/**
- * my_error - error handling
- * @s_arr: Input, tokken arr
- * @str: Input, input
- * @new_str: Input, input realloced
- * @l_count: Input, shell iterations
- *
- * Return: none
- */
-void my_error(char **s_arr, char **argv, char *str, char *new_str, int l_count)
-{
-	(void)l_count;
-
-	write(STDERR_FILENO, argv[0], _strlen(argv[0]));
-	write(STDERR_FILENO, ": ", 2);
-	write(STDERR_FILENO, "No such file or directory\n", 26);
-	clean_up(s_arr, str, new_str);
-	exit(0);
-}
-
-
-/**
- * split_line - tokenizes str
- * @s: Input, str
- *
- *
- * Return: pointer to sub str's
- */
-
-char **split_line(char *s)
-{
-	int i, t_count;
-	char **s_arr, *str_tok, *t_copy;
-
-	i = 0;
-        t_count = 0;
-	if (s == NULL)
+	tmp = malloc(sizeof(my_list));
+	if (tmp == NULL)
 		return (NULL);
-	while (*(s + i) != '\0')
+	head = tmp;
+
+	end = malloc(sizeof(my_list));
+	if (end == NULL)
 	{
-		if (s[i] != ' ' && (s[i + 1] == ' ' || s[i + 1] == '\0'
-				       || s[i + 1] == '\t'))
-			t_count++;
+		free(tmp);
+		return (NULL);
+	}
+	end->next = NULL;
+
+	while (str[i] != '\0')
+	{
+		if (str[i] == ':')
+			nodes++;
 		i++;
 	}
 
-	i = 0;
-	s_arr = malloc(sizeof(char *) * (t_count + 1));
-	if (s_arr == NULL)
-		return (NULL);
-	str_tok = strtok(s, TOKKEN_DELIMS);
-	while (str_tok != NULL)
+	while ((nodes - 2) > 0)
 	{
-		t_copy = _strdup(str_tok);
-		if (t_copy == NULL)
+		node = malloc(sizeof(my_list));
+		if (node == NULL)
 		{
-			free(s_arr);
+			free(tmp);
+			free(end);
 			return (NULL);
 		}
-		*(s_arr + i) = t_copy;
-		str_tok = strtok(NULL, TOKKEN_DELIMS);
-		i++;
+		tmp->next = node;
+		tmp = tmp->next;
+		nodes--;
 	}
-	*(s_arr + i) = NULL;
-	return (s_arr);
+	tmp->next = end;
+	return (head);
+}
+
+/**
+ * path_list - creates dir llist of the path:
+ * @str: Input, path
+ * @list: Input, list
+ *
+ * Return: llist of path
+ */
+
+my_list *path_list(char *str, my_list *list)
+{
+	my_list *ptr, *head;
+	char *dir;
+	int i = 0, j = 0, stcnt = 0, dirlen = 0;
+
+	if (str ==  NULL || list == NULL)
+		return (NULL);
+	head = list;
+	ptr = head;
+	while (ptr != NULL)
+	{
+		if (str[i] == ':' || str[i] == '\0')
+		{
+			if (str[i] != '\0')
+				i++;
+			dir = malloc(sizeof(char) * dirlen + 2);
+			if (dir == NULL)
+				return (NULL);
+			while (str[stcnt] != ':' && str[stcnt] != '\0')
+			{
+				dir[j] = str[stcnt];
+				stcnt++;
+				j++;
+			}
+			dir[j++] = '/';
+			dir[j] = '\0';
+			stcnt = i;
+			j = 0;
+			ptr->dir = dir;
+			ptr = ptr->next;
+		}
+
+		else
+		{
+			dirlen++;
+			i++;
+		}
+	}
+	return (head);
+}
+
+
+/**
+ * get_path - locates path
+ * p_name: Input, path to search
+ * @p_arr: Input, env
+ *
+ * Return: path
+ */
+
+char *get_path(const char *p_name, char **p_arr)
+{
+	int i = 0;
+	int j = 0;
+
+	if (p_name == NULL || p_arr == NULL || *p_arr == NULL)
+		return (NULL);
+	while (p_arr[i] != NULL)
+	{
+		while (p_arr[i][j] == p_name[j])
+			j++;
+		if (p_arr[i][j] == '=')
+		{
+			j++;
+			return (&(p_arr[i][j]));
+		}
+		i++;
+		j = 0;
+	}
+	write(STDOUT_FILENO, "Not found in p_arrironment", 24);
+	return (NULL);
+}
+
+/**
+ * get_cmd_path - gets path of command
+ * @p_arr: Input, env
+ * @command: Input, command
+ *
+ * Return: full command
+ */
+
+char *get_cmd_path(char *command, char **p_arr)
+{
+	char *path, *full_path;
+	my_list *list, *tmp;
+	struct stat st;
+
+	if (command == NULL || p_arr == NULL || *p_arr == NULL)
+		return (NULL);
+	path = get_path("PATH", p_arr);
+	if (path == NULL)
+	{
+		write(STDERR_FILENO, "PATH not found", 14);
+		_exit(0);
+	}
+	list = create_list(path);
+	if (list == NULL)
+	{
+		write(STDERR_FILENO, "Issues with PATH", 16);
+		_exit(0);
+	}
+	list = path_list(path, list);
+	tmp = list;
+	while (tmp != NULL)
+	{
+		if (path[0] == ':')
+			full_path = str_concat("./", command);
+		else
+			full_path = str_concat(tmp->dir, command);
+		if (full_path == NULL)
+			return (NULL);
+		if (stat(full_path, &st) == 0 && access(full_path, X_OK) == 0)
+		{
+			free_list(list);
+			return (full_path);
+		}
+		tmp = tmp->next;
+		free(full_path);
+	}
+	free_list(list);
+	return (NULL);
 }
