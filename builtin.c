@@ -3,27 +3,27 @@
 
 /**
  * my_built_in - shell buitins
- * @s_arr: Input, command and arguments
- * @p_arr: Input, env
+ * @arr: Input, command and arguments
+ * @env: Input, env
  * @line: Input, input
  * @new_line: Input, realloced input
- * @l_count: Input, loop i
+ * @l_cnt: Input, loop i
  *
  * Return: status
  */
 
-int my_built_in(char **s_arr, char **p_arr, char *line, char *new_line, int l_count)
+int my_built_in(char **arr, char **env, char *line, char *new_line, int l_cnt)
 {
-	if (s_arr == NULL || *s_arr == NULL)
+	if (arr == NULL || *arr == NULL)
 		return (1);
-	if (p_arr == NULL || *p_arr == NULL)
+	if (env == NULL || *env == NULL)
 		return (1);
-	if (_strcmp((s_arr[0]), "exit") == 0)
-		return (my_exit(s_arr, line, new_line, l_count));
-	else if (_strcmp((s_arr[0]), "cd") == 0)
-		return (my_cd(s_arr, p_arr));
-	else if (_strcmp((s_arr[0]), "env") == 0)
-		return (print_str_arr(p_arr));
+	if (_strcmp((arr[0]), "exit") == 0)
+		return (my_exit(arr, line, new_line, l_cnt));
+	else if (_strcmp((arr[0]), "cd") == 0)
+		return (my_cd(arr, env));
+	else if (_strcmp((arr[0]), "env") == 0)
+		return (print_str_arr(env));
 	else
 		return (1);
 }
@@ -33,12 +33,12 @@ int my_built_in(char **s_arr, char **p_arr, char *line, char *new_line, int l_co
  * @s_arr: Input, command and arguments
  * @line: Input, input
  * @new_line: Input, realloced input
- * @l_count: Input, loop i
+ * @l_cnt: Input, loop i
  *
  * Return: status
  */
 
-int my_exit(char **s_arr, char *line, char *new_line, int l_count)
+int my_exit(char **s_arr, char *line, char *new_line, int l_cnt)
 {
 	int num, j;
 	char *cmd_num;
@@ -54,7 +54,7 @@ int my_exit(char **s_arr, char *line, char *new_line, int l_count)
 		num = _atoi(s_arr[1]);
 		if (num == -1)
 		{
-			cmd_num = int_to_str(l_count);
+			cmd_num = int_to_str(l_cnt);
 			write(STDERR_FILENO, s_arr[0], 7);
 			write(STDERR_FILENO, cmd_num, _strlen(cmd_num));
 			write(STDERR_FILENO, ": exit: Illegal number: ", 24);

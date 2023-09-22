@@ -53,28 +53,28 @@ int main(int ac, char **av, char **envp)
 
 /**
  * my_exec - main shell executer
- * @s_arr: Input, commands
- * @p_arr: Input, env
- * @argv: Input, cl args
- * @line: Input, line
- * @new_line: Input, new realloced line
- * @l_count: Input, loop iterations
+ * @arr: Input, commands
+ * @env: Input, env
+ * @av: Input, cl args
+ * @s: Input, s
+ * @n_s: Input, new realloced s
+ * @l_cnt: Input, loop iterations
  *
- * Reurn: status
+ * Return: status
  */
 
-int my_exec(char **s_arr, char **p_arr, char **argv, char *line, char *new_line, int l_count)
+int my_exec(char **arr, char **env, char **av, char *s, char *n_s, int l_cnt)
 {
 	pid_t my_pid;
 	char *command;
 	int signal;
 	struct stat status;
 
-	if (s_arr == NULL || *s_arr == NULL || argv == NULL || *argv == NULL)
+	if (arr == NULL || *arr == NULL || av == NULL || *av == NULL)
 		return (-1);
-	if (p_arr == NULL || *p_arr == NULL)
+	if (env == NULL || *env == NULL)
 		return (-1);
-	if (my_built_in(s_arr, p_arr, line, new_line, l_count) == 0)
+	if (my_built_in(arr, env, s, n_s, l_cnt) == 0)
 		return (0);
 	my_pid = fork();
 	if (my_pid == -1)
@@ -84,21 +84,21 @@ int my_exec(char **s_arr, char **p_arr, char **argv, char *line, char *new_line,
 	}
 	if (my_pid == 0)
 	{
-		if (s_arr[0][0] == '/')
+		if (arr[0][0] == '/')
 		{
-			if (stat(s_arr[0], &status) == -1)
-				my_error(argv, s_arr, l_count, line, new_line);
-			if (access(s_arr[0], X_OK) == -1)
-				my_error(argv, s_arr, l_count, line, new_line);
-			execve(s_arr[0], s_arr, NULL);
+			if (stat(arr[0], &status) == -1)
+				my_error(av, arr, l_cnt, s, n_s);
+			if (access(arr[0], X_OK) == -1)
+				my_error(av, arr, l_cnt, s, n_s);
+			execve(arr[0], arr, NULL);
 		}
 		else
 		{
-			command = get_cmd_path(s_arr[0], p_arr);
+			command = get_cmd_path(arr[0], env);
 			if (command == NULL)
-				my_error(argv, s_arr, l_count, line, new_line);
+				my_error(av, arr, l_cnt, s, n_s);
 			else
-				execve(command, s_arr, NULL);
+				execve(command, arr, NULL);
 		}
 	}
 	else

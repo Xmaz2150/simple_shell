@@ -6,17 +6,17 @@
  * @s_arr: Input, tokken arr
  * @line: Input, input
  * @new_line: Input, input realloced
- * @l_count: Input, shell iterations
+ * @l_cnt: Input, shell iterations
  *
  * Return: none
  */
 
-void my_error(char **argv, char **s_arr, int l_count, char *line,
+void my_error(char **argv, char **s_arr, int l_cnt, char *line,
 		   char *new_line)
 {
 	char *num;
 
-	num = int_to_str(l_count);
+	num = int_to_str(l_cnt);
 	write(STDERR_FILENO, argv[0], _strlen(argv[0]));
 	write(STDERR_FILENO, ": ", 2);
 	write(STDERR_FILENO, num, _strlen(num));

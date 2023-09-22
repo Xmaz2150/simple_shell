@@ -19,9 +19,9 @@ void ctrl_c(int signum)
  *
  * Return: int succesful termination
  */
-int ctrl_d(char *input)
+int ctrl_d(char *str)
 {
-	free(input);
+	free(str);
 	if (isatty(STDIN_FILENO) == 1)
 		write(STDOUT_FILENO, "\n", 1);
 	return (0);

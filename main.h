@@ -21,12 +21,12 @@
 
 typedef struct node
 {
-        char *dir;
-        struct node *next;
+	char *dir;
+	struct node *next;
 }
 my_list;
 
-int my_exec(char **s_arr, char **p_arr, char **argv, char *line, char *new_line, int l_count);
+int my_exec(char **arr, char **env, char **av, char *s, char *n_s, int l_cnt);
 void my_prompt(char *str);
 
 my_list *create_list(char *str);
@@ -34,7 +34,7 @@ char *get_path(const char *p_name, char **p_arr);
 my_list *path_list(char *str, my_list *list);
 char *get_cmd_path(char *command, char **p_arr);
 
-void my_error(char **argv, char **s_arr, int cmdcount_int, char *str, char *new_str);
+void my_error(char **argv, char **s_arr, int l_cnt, char *str, char *new_str);
 
 int _atoi(char *s);
 int tens_multiplier(int pos, char *s);
@@ -43,7 +43,7 @@ char *int_to_str(int n);
 int _strlen(char *s);
 int _strcmp(char *s1, char *s2);
 
-int my_built_in(char **s_arr, char **p_arr, char *str, char *new_str, int cdnum);
+int my_built_in(char **arr, char **env, char *str, char *new_str, int l_cnt);
 int my_exit(char **s_arr, char *str, char *new_str, int l_count);
 int my_cd(char **s_arr, char **p_arr);
 

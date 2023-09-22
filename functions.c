@@ -102,7 +102,7 @@ my_list *path_list(char *str, my_list *list)
 
 /**
  * get_path - locates path
- * p_name: Input, path to search
+ * @p_name: Input, path to search
  * @p_arr: Input, env
  *
  * Return: path
