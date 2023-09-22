@@ -44,17 +44,11 @@ void print_str_arr(char **s_arr)
  */
 void my_error(char **s_arr, char **argv, char *str, char *new_str, int l_count)
 {
-	char *num;
+	(void)l_count;
 
-	num = int_to_str(l_count);
 	write(STDERR_FILENO, argv[0], _strlen(argv[0]));
 	write(STDERR_FILENO, ": ", 2);
-	write(STDERR_FILENO, num, _strlen(num));
-	write(STDERR_FILENO, ": ", 2);
-	write(STDERR_FILENO, s_arr[0], _strlen(s_arr[0]));
-	write(STDERR_FILENO, ": ", 2);
-	write(STDERR_FILENO, "not found\n", 10);
-	free(num);
+	write(STDERR_FILENO, "No such file or directory\n", 26);
 	clean_up(s_arr, str, new_str);
 	exit(0);
 }

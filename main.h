@@ -37,7 +37,10 @@ char *int_to_str(int n);
 void free_list(my_list *head);
 char *str_realloc(char *str);
 int _strlen(char *s);
+int _atoi(char *s);
+int tens_multiplier(int pos, char *s);
 
+int my_exit(char **s_arr, char *str, char *new_str, int l_count);
 char *my_path(char **p_arr);
 my_list *create_list(char *str);
 my_list *path_list(char *path);
