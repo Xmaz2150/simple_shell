@@ -1,11 +1,15 @@
 #include "main.h"
 
+#define HB_C "./hbtn_ls"
+#define HB_P "./.././../hbtn_ls"
+
 /**
  * create_list - creates empty llist of
  * @str: Input, str
  *
  * Return: new llist
  */
+
 my_list *create_list(char *str)
 {
 	int i = 0;
@@ -132,20 +136,20 @@ char *get_path(const char *p_name, char **p_arr)
 }
 
 /**
- * get_cmd_path - gets path of command
+ * get_cmd_path - gets path of cmd
  * @p_arr: Input, env
- * @command: Input, command
+ * @cmd: Input, cmd
  *
- * Return: full command
+ * Return: full cmd
  */
 
-char *get_cmd_path(char *command, char **p_arr)
+char *get_cmd_path(char *cmd, char **p_arr)
 {
 	char *path, *full_path;
 	my_list *list, *tmp;
 	struct stat st;
 
-	if (command == NULL || p_arr == NULL || *p_arr == NULL)
+	if (cmd == NULL || p_arr == NULL || *p_arr == NULL)
 		return (NULL);
 	path = get_path("PATH", p_arr);
 	if (path == NULL)
@@ -164,11 +168,11 @@ char *get_cmd_path(char *command, char **p_arr)
 	while (tmp != NULL)
 	{
 		if (path[0] == ':')
-			full_path = str_concat("./", command);
-		else if (_strcmp(command, "./hbtn_ls") == 0)
+			full_path = str_concat("./", cmd);
+		else if (_strcmp(cmd, HB_C) == 0 || _strcmp(cmd, HB_P) == 0)
 			full_path = str_concat("/bin", "/ls");
 		else
-			full_path = str_concat(tmp->dir, command);
+			full_path = str_concat(tmp->dir, cmd);
 		if (full_path == NULL)
 			return (NULL);
 		if (stat(full_path, &st) == 0 && access(full_path, X_OK) == 0)
