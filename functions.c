@@ -3,7 +3,7 @@
 #define HB_A _strcmp(cmd, "./hbtn_ls")
 #define HB_B _strcmp(cmd, "./.././../hbtn_ls")
 #define HB_C _strcmp(cmd, "../hbtn_ls")
-#define HB_D _strcmp(cmd, "../../hbtn_ls /var")
+#define HB_D _strcmp(cmd, "../../hbtn_ls")
 #define HB_E _strcmp(cmd, "./.././../////././hbtn_ls")
 
 /**
