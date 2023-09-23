@@ -44,3 +44,4 @@ char **split_line(char *line)
 	*(s_arr + i) = NULL;
 	return (s_arr);
 }
+

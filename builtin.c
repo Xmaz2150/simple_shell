@@ -1,5 +1,6 @@
 #include "main.h"
 
+#define PATH_LEN 1032
 
 /**
  * my_built_in - shell buitins
@@ -80,34 +81,40 @@ int my_exit(char **s_arr, char *line, char *new_line, int l_cnt)
 
 int my_cd(char **s_arr, char **p_arr)
 {
-	int i = 0;
-	char cwd[1024];
-	char *newdir;
+	char *new_dir;
+	char current_dir[PATH_LEN];
 
 	if (s_arr[1] == NULL)
-	{
-		if (chdir(get_cmd_path("HOME", p_arr)) == -1)
-		{
-			perror(s_arr[0]);
-			write(STDERR_FILENO, "cd: can't cd to home\n", 21);
-		}
-	}
+		new_dir = get_path("HOME", p_arr);
+	else if (_strcmp(s_arr[1], "-") == 0)
+		new_dir = get_path("OLDPWD", p_arr);
 	else
+		new_dir = s_arr[1];
+
+	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
 	{
-		getcwd(cwd, 1024);
-		while (cwd[i] != '\0')
-			i++;
-		cwd[i++] = '/';
-		cwd[i] = '\0';
-		newdir = str_concat(cwd, s_arr[1]);
-		if (newdir == NULL)
-			return (0);
-		if (chdir(newdir) == -1)
-		{
-			perror(s_arr[0]);
-			write(STDERR_FILENO, "can't cd into dir\n", 24);
-		}
-		free(newdir);
+		perror("getcwd");
+		exit(2);
+	}
+	if (setenv("OLDPWD", current_dir, 1) == -1)
+	{
+		perror("setenv");
+		exit(2);
+	}
+	if (chdir(new_dir) == -1)
+	{
+		perror("chdir");
+		exit(2);
+	}
+	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
+	{
+		perror("getcwd");
+		exit(2);
+	}
+	if (setenv("PWD", current_dir, 1) == -1)
+	{
+		perror("setenv");
+		exit(2);
 	}
 	return (0);
 }
