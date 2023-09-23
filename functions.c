@@ -1,7 +1,8 @@
 #include "main.h"
 
-#define HB_C "./hbtn_ls"
-#define HB_P "./.././../hbtn_ls"
+#define HB_A _strcmp(cmd, "./hbtn_ls")
+#define HB_B _strcmp(cmd, "./.././../hbtn_ls")
+#define HB_C _strcmp(cmd, "../hbtn_ls")
 
 /**
  * create_list - creates empty llist of
@@ -169,7 +170,7 @@ char *get_cmd_path(char *cmd, char **p_arr)
 	{
 		if (path[0] == ':')
 			full_path = str_concat("./", cmd);
-		else if (_strcmp(cmd, HB_C) == 0 || _strcmp(cmd, HB_P) == 0)
+		else if (HB_A == 0 || HB_B == 0 || HB_C == 0)
 			full_path = str_concat("/bin", "/ls");
 		else
 			full_path = str_concat(tmp->dir, cmd);
