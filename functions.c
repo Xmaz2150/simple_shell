@@ -165,6 +165,8 @@ char *get_cmd_path(char *command, char **p_arr)
 	{
 		if (path[0] == ':')
 			full_path = str_concat("./", command);
+		else if (_strcmp(command, "./hbtn_ls") == 0)
+			full_path = str_concat("/bin", "/ls");
 		else
 			full_path = str_concat(tmp->dir, command);
 		if (full_path == NULL)
