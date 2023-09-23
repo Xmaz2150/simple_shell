@@ -16,7 +16,7 @@ char **split_line(char *line)
 
 	if (line == NULL)
 		return (NULL);
-	while (*(line + i) != '\0')
+	while (*(line + i) != '\0' || *(line + i) != '#')
 	{
 		if (line[i] != ' ' && (line[i + 1] == ' ' || line[i + 1] == '\0'
 				       || line[i + 1] == '\t'))
