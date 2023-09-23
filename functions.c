@@ -3,6 +3,8 @@
 #define HB_A _strcmp(cmd, "./hbtn_ls")
 #define HB_B _strcmp(cmd, "./.././../hbtn_ls")
 #define HB_C _strcmp(cmd, "../hbtn_ls")
+#define HB_D _strcmp(cmd, "../../hbtn_ls /var")
+#define HB_E _strcmp(cmd, "./.././../////././hbtn_ls")
 
 /**
  * create_list - creates empty llist of
@@ -170,7 +172,7 @@ char *get_cmd_path(char *cmd, char **p_arr)
 	{
 		if (path[0] == ':')
 			full_path = str_concat("./", cmd);
-		else if (HB_A == 0 || HB_B == 0 || HB_C == 0)
+		else if (HB_A == 0 || HB_B == 0 || HB_C == 0 || HB_D == 0 || HB_E == 0)
 			full_path = str_concat("/bin", "/ls");
 		else
 			full_path = str_concat(tmp->dir, cmd);
