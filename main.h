@@ -46,6 +46,8 @@ int _strcmp(char *s1, char *s2);
 int my_built_in(char **arr, char **env, char *str, char *new_str, int l_cnt);
 int my_exit(char **s_arr, char *str, char *new_str, int l_count);
 int my_cd(char **s_arr, char **p_arr);
+int my_set(char **s_arr);
+int my_unset(char **s_arr);
 
 char *_strdup(char *str);
 char *str_concat(char *s1, char *s2);

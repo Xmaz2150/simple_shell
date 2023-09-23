@@ -25,6 +25,10 @@ int my_built_in(char **arr, char **env, char *line, char *new_line, int l_cnt)
 		return (my_cd(arr, env));
 	else if (_strcmp((arr[0]), "env") == 0)
 		return (print_str_arr(env));
+	else if (_strcmp((arr[0]), "setenv") == 0)
+		return (my_set(arr));
+	else if (_strcmp((arr[0]), "unsetenv") == 0)
+		return (my_unset(arr));
 	else
 		return (1);
 }
