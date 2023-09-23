@@ -52,7 +52,7 @@ int my_exit(char **s_arr, char *line, char *new_line, int l_cnt)
 	if (s_arr[1] == NULL)
 	{
 		clean_up(line, new_line, s_arr);
-		exit(2);
+		exit(0);
 	}
 	else
 	{
@@ -72,6 +72,7 @@ int my_exit(char **s_arr, char *line, char *new_line, int l_cnt)
 		clean_up(line, new_line, s_arr);
 		_exit(num);
 	}
+
 }
 
 
